@@ -1,12 +1,11 @@
-from src.database.db_helpers import DatabaseConnection, with_db_connection
+from db_helpers import DatabaseConnection, with_db_connection
 
 # Переписать на модели (SQLAlchemy например)
 @with_db_connection
 def init_database(db: DatabaseConnection, payload: dict = {}):
-    print(db.cursor)
     db.cursor.execute("""CREATE TABLE IF NOT EXISTS user (
                         id INTEGER NOT NULL,
-                        login VARCHAR(30) NOT NULL,
+                        login VARCHAR(30) NOT NULL UNIQUE,
                         salt VARCHAR(32) NOT NULL,
                         hash VARCHAR(60) NOT NULL,
                         display_name VARCHAR(50) NOT NULL,
@@ -35,3 +34,6 @@ def init_database(db: DatabaseConnection, payload: dict = {}):
                         )""")
     
     db.connection.commit()
+
+if __name__ == "__main__":
+    init_database()

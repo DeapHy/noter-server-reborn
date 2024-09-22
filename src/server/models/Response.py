@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class ServerResponse(BaseModel):
+class ServerDefaultResponse(BaseModel):
     success: bool
     details: str | None = None

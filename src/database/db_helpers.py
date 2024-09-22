@@ -32,3 +32,21 @@ def with_db_connection(func):
             print(f"Error connecting to database {e}")
             return "error"
     return wrapper
+
+def with_user_exists(func):
+    def wrapper(db: DatabaseConnection, payload: dict):
+        user = db.cursor.execute("SELECT * FROM user WHERE login=?", (payload["login"], )).fetchall()
+        if len(user):
+            return func(db, user[0], payload)
+        else:
+            return "User doesn't exists"
+    return wrapper
+
+def with_active_session(func):
+    def wrapper(db: DatabaseConnection, payload: dict):
+        session = db.cursor.execute("SELECT * FROM session WHERE userid=(SELECT id FROM user WHERE login=?)", (payload["login"], )).fetchall()
+        if len(session):
+            return func(db, session[1], payload)
+        else:
+            return "No active sessions"
+    return wrapper
