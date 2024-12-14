@@ -33,7 +33,7 @@ async def ott():
     return status
 
 
-@user_router.get("/login")
+@user_router.post("/login")
 async def server_login():
     status = login(payload={
         "login": "123",
@@ -41,8 +41,8 @@ async def server_login():
     })
     return status
 
-@user_router.get("/user/{login}")
-async def get_user(login: str):
+@user_router.get("/user/{id}")
+async def get_user(id: int):
     ...
 
 @user_router.delete("/user/{id}")
